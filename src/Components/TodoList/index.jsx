@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React from "react";
 
 /** Generate Random ID */
 import { v4 as uuidv4 } from "uuid";
@@ -12,27 +12,36 @@ import styles from "./style.module.css";
 
 import { dataTodos } from "../../dataTodos";
 
-const TodoList = () => {
-    const [data, setData] = useState(dataTodos);
-
-    const deleteTodoItem = (id) => {
-        const newListTodo = data.filter((item) => item.id !== id);
-
-        setData(newListTodo);
+class TodoList extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: dataTodos
+        };
     }
 
-    const addTodoItem = (value) => {
+    deleteTodoItem = (id) => {
+        const newListTodo = this.state.data.filter((item) => item.id !== id);
+
+        this.setState({
+            data: newListTodo
+        });
+    }
+
+    addTodoItem = (value) => {
         const newTodo = {
             id: uuidv4(),
             title: value,
             completed: false
         }
 
-        setData([...data, newTodo]);
+        this.setState({
+            data: [...this.state.data, newTodo]
+        });
     }
 
-    const onChangeCheckbox = (e, id) => {
-        const newListTodo = data.map((item) => {
+    onChangeCheckbox = (e, id) => {
+        const newListTodo = this.state.data.map((item) => {
             if (item.id === id) {
                 return (
                     {
@@ -53,27 +62,31 @@ const TodoList = () => {
             }
         })
 
-        setData(newListTodo);
+        this.setState({
+            data: newListTodo
+        });
     }
 
-    return (
-        <div className={styles.container_list}>
-            <InputTodo addTodoItem={addTodoItem} />
-            {
-                data.map((item) => {
-                    return (
-                        <TodoItem
-                            key={item.id}
-                            id={item.id}
-                            text={item.title}
-                            completed={item.completed}
-                            deleteTodoItem={deleteTodoItem}
-                            onChangeCheckbox={onChangeCheckbox} />
-                    );
-                })
-            }
-        </div>
-    );
+    render() {
+        return (
+            <div className={styles.container_list}>
+                <InputTodo addTodoItem={this.addTodoItem} />
+                {
+                    this.state.data.map((item) => {
+                        return (
+                            <TodoItem
+                                key={item.id}
+                                id={item.id}
+                                text={item.title}
+                                completed={item.completed}
+                                deleteTodoItem={this.deleteTodoItem}
+                                onChangeCheckbox={this.onChangeCheckbox} />
+                        );
+                    })
+                }
+            </div>
+        );
+    }
 }
 
 export default TodoList;

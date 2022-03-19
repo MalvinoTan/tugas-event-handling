@@ -1,15 +1,18 @@
+import React from "react";
+
 /** Components */
 import Header from "../../Components/Header";
 import TodoList from "../../Components/TodoList";
 
-const Home = () => {
-    return (
-        <>
-            <Header />
-            <TodoList />
-        </>
-    )
-    
+class Home extends React.Component {
+    render() {
+        return (
+            <>
+                <Header />
+                <TodoList />
+            </>
+        );
+    }
 }
 
 export default Home;
